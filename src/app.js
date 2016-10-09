@@ -1,7 +1,9 @@
-import { Menu, globalShortcut, clipboard } from 'electron'
+import { Menu, globalShortcut, clipboard, webContents, ipcMain, ipcRender } from 'electron'
 import MenuBar from 'menubar'
 import path from 'path'
 import { wait } from './utils/promises'
+import * as Socket from './services/Socket'
+import * as Notification from './services/Notification'
 
 
 const menuBar = MenuBar({ tooltip: 'clipboard' })
@@ -15,24 +17,43 @@ const doSomething = {
 const quit = { label: 'Quit', type: 'normal', role: 'quit' }
 
 
+const onClipboardChanged = f => {
+  let prevValue = clipboard.readText()
+  const interval = setInterval(() => {
+    const value = clipboard.readText()
+    if (value !== prevValue) {
+      prevValue = value
+      f(value)
+    }
+  }, 200)
+  return () => clearInteval(interval)
+}
+
 
 menuBar.on('ready', () => {
-  const ret = globalShortcut.register('CommandOrControl+Shift+C', () => {
-    // console.log(clipboard.availableFormats())
-    console.log(clipboard.readText())
-    // console.log(clipboard.readImage())
-    // console.log('CommandOrControl+Shift+C is pressed')
+
+  let lastCopy = ''
+
+  Socket.copy$.forEach(data => {
+    lastCopy = data
+    Notification.newCopy(data)
   })
 
-  if (!ret) console.log('registration failed')
+  globalShortcut.register('CommandOrControl+Shift+V', () => {
+    Socket.emitCopy(clipboard.readText('selection'))
+  })
 
-  console.log(globalShortcut.isRegistered('CommandOrControl+Shift+C'))
+  globalShortcut.register('CommandOrControl+Shift+C', () => {
+    clipboard.writeText(lastCopy)
+  })
 
+  onClipboardChanged(x => console.log(x))
 
   menuBar.tray.setContextMenu(
     Menu.buildFromTemplate([
       doSomething,
       { type: 'separator' },
+      { role: 'paste' },
       quit,
     ])
   )
@@ -40,8 +61,5 @@ menuBar.on('ready', () => {
 
 
 menuBar.on('will-quit', () => {
-  // Unregister a shortcut.
-  globalShortcut.unregister('CommandOrControl+Shift+C')
-  // Unregister all shortcuts.
   globalShortcut.unregisterAll()
 })
