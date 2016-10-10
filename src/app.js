@@ -40,14 +40,16 @@ menuBar.on('ready', () => {
   })
 
   globalShortcut.register('CommandOrControl+Shift+V', () => {
-    Socket.emitCopy(clipboard.readText('selection'))
+    const copy = clipboard.readText('selection')
+    Notification.sentCopy(copy)
+    Socket.emitCopy(copy)
   })
 
   globalShortcut.register('CommandOrControl+Shift+C', () => {
     clipboard.writeText(lastCopy)
   })
 
-  onClipboardChanged(x => console.log(x))
+  // onClipboardChanged(x => console.log(x))
 
   menuBar.tray.setContextMenu(
     Menu.buildFromTemplate([

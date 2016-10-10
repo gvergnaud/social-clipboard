@@ -11,3 +11,8 @@ export const newCopy = copy => notify({
   title: `new copy!`,
   message: copy,
 })
+
+export const sentCopy = copy => notify({
+  title: `Success!`,
+  message: `you just sent ${copy}`,
+})
