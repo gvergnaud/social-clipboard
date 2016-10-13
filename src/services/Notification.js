@@ -8,15 +8,31 @@ const notify = options => new Promise((resolve, reject) => {
   })
 }).catch(err => console.error('Notification error :', err))
 
-export const newCopy = copy => notify({
+export const newTextCopy = text => notify({
   title: `new copy!`,
-  message: copy,
+  message: text,
   appIcon: path.join(__dirname, '..', 'assets', 'image.jpg',),
   contentImage: path.join(__dirname, '..', 'assets', 'image.jpg',),
   open: 'file://' + path.join(__dirname, '..', 'assets', 'image.jpg'),
 })
 
-export const sentCopy = copy => notify({
+export const newFileCopy = fileName => notify({
+  title: `somebody sent a file!`,
+  subtitle: '',
+  message: fileName,
+  appIcon: path.join(__dirname, '..', 'assets', 'image.jpg',),
+  contentImage: path.join(__dirname, '..', 'assets', 'image.jpg',),
+  open: 'file://' + path.join(__dirname, '..', 'assets', 'image.jpg'),
+})
+
+
+export const sentTextCopy = text => notify({
   title: `Success!`,
-  message: `you just sent ${copy}`,
+  message: `you just sent ${text}`,
+})
+
+export const sentFileCopy = fileName => notify({
+  title: `Success!`,
+  subtitle: 'you just sent a file',
+  message: `${fileName}`,
 })

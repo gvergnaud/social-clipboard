@@ -3,14 +3,17 @@ import {Observable} from 'rxjs'
 
 const socket = io('https://cl1pboard.herokuapp.com')
 
-export const copy$ = new Observable(observer => {
-  socket.on('copy', data => {
-    observer.next(data)
-  })
-  return { unsubscribe: () => socket.removeAllListeners('copy') }
-}).publish()
+const createConnection = eventName => {
+  const stream$ = new Observable(observer => {
+    socket.on(eventName, data => observer.next(data))
+    return { unsubscribe: () => socket.removeAllListeners(eventName) }
+  }).share()
 
-copy$.connect()
+  const emit = data => socket.emit(eventName, data)
+
+  return { stream$, emit }
+}
 
 
-export const emitCopy = data => socket.emit('copy', data)
+export const { stream$: fileCopy$, emit: emitFileCopy } = createConnection('file_copy')
+export const { stream$: textCopy$, emit: emitTextCopy } = createConnection('text_copy')

@@ -1,9 +1,9 @@
 import { Menu, globalShortcut, webContents, ipcMain, ipcRender } from 'electron'
 import MenuBar from 'menubar'
 import path from 'path'
-import { map, last } from 'lodash/fp'
+import { map, last, head } from 'lodash/fp'
 import { wait } from './utils/promises'
-import * as Socket from './services/Socket'
+import { emitTextCopy, textCopy$, emitFileCopy, fileCopy$ }  from './services/Socket'
 import * as Notification from './services/Notification'
 import * as Clipboard from './services/Clipboard'
 import { readFile, writeFile } from 'fs-promise'
@@ -13,39 +13,78 @@ const menuBar = MenuBar({ tooltip: 'clipboard' })
 
 menuBar.on('ready', () => {
 
-  let lastCopy = ''
+  let lastCopy = {}
 
-  Socket.copy$.forEach(data => {
-    lastCopy = data
-    Notification.newCopy(data)
+  const Copy = {
+    Text: 'Copy.Text',
+    File: 'Copy.File',
+  }
+
+  textCopy$
+    .forEach(data => {
+    lastCopy = {
+      type: Copy.Text,
+      data
+    }
+    Notification.newTextCopy(data)
   })
+
+  fileCopy$
+    .forEach(({ name, buffer }) => {
+      writeFile(path.resolve('files', name), buffer)
+      lastCopy = {
+        type: Copy.File,
+        path: path.resolve('files', name),
+        name,
+      }
+      Notification.newFileCopy(name)
+    })
 
 
   Clipboard.onClipboardChange(() => {
     if (Clipboard.isFile()) {
-      Clipboard.getFilePaths()
-        .then(map(filePath => {
-          const name = last(filePath.split(path.sep))
-          return readFile(filePath).then(buffer => ({ name, buffer }))
-        }))
-        .then(ps => Promise.all(ps))
-        .then(map(({ name, buffer }) => writeFile(path.resolve('files', name), buffer)))
-        .catch(err => console.error(err))
+      Clipboard.getFilePaths().then(console.log)
     } else {
       console.log('clipboard', Clipboard.readText())
     }
   })
 
   globalShortcut.register('CommandOrControl+Shift+V', () => {
-    const copy = Clipboard.readText()
-    Notification.sentCopy(copy)
-    Socket.emitCopy(copy)
+
+    if (Clipboard.isFile()) {
+
+      Clipboard.getFilePaths()
+        .then(head)
+        .then(filePath => {
+          const name = last(filePath.split(path.sep))
+          return readFile(filePath).then(buffer => ({ name, buffer }))
+        })
+        .then(({ name, buffer }) => {
+          emitFileCopy({ name, buffer })
+          Notification.sentFileCopy(name)
+        })
+        .catch(err => console.error(err))
+
+    } else {
+
+      const text = Clipboard.readText()
+      Notification.sentTextCopy(text)
+      emitTextCopy(text)
+
+    }
+
+
   })
 
   globalShortcut.register('CommandOrControl+Shift+C', () => {
-    Clipboard.writeText(lastCopy)
-    // if last copy is a file
-    // Clipboard.writeFileWithPath(path.resolve('files', 'Screen Shot 2016-10-11 at 10.56.51 AM.png'))
+    switch (lastCopy.type) {
+      case Copy.Text:
+        Clipboard.writeText(lastCopy.data)
+        break
+      case Copy.File:
+        Clipboard.writeFileWithPath(lastCopy.path)
+        break
+    }
   })
 
   menuBar.tray.setContextMenu(
