@@ -1,12 +1,12 @@
+import fs from 'fs'
+import path from 'path'
 import { Menu, globalShortcut, webContents, ipcMain, ipcRender } from 'electron'
 import MenuBar from 'menubar'
-import path from 'path'
 import { map, last, head } from 'lodash/fp'
 import { wait } from './utils/promises'
-import { emitTextCopy, textCopy$, emitFileCopy, fileCopy$ }  from './services/Socket'
+import { emitTextCopy, textCopy$, emitFileStream, fileStream$ }  from './services/Socket'
 import * as Notification from './services/Notification'
 import * as Clipboard from './services/Clipboard'
-import { readFile, writeFile } from 'fs-promise'
 import { log } from './utils/debug'
 
 const menuBar = MenuBar({ tooltip: 'clipboard' })
@@ -21,7 +21,7 @@ menuBar.on('ready', () => {
   }
 
   textCopy$
-    .forEach(data => {
+    .forEach(([ data ]) => {
     lastCopy = {
       type: Copy.Text,
       data
@@ -29,15 +29,21 @@ menuBar.on('ready', () => {
     Notification.newTextCopy(data)
   })
 
-  fileCopy$
-    .forEach(({ name, buffer }) => {
-      writeFile(path.resolve('files', name), buffer)
-      lastCopy = {
-        type: Copy.File,
-        path: path.resolve('files', name),
-        name,
-      }
-      Notification.newFileCopy(name)
+  fileStream$
+    .forEach(([ stream, name ]) => {
+      const filePath = path.resolve('file', name)
+
+      stream
+        .pipe(fs.createWriteStream(filePath))
+        .on('end', () => {
+          lastCopy = {
+            type: Copy.File,
+            path: filePath,
+            name,
+          }
+
+          Notification.newFileCopy(name)
+        })
     })
 
 
@@ -55,13 +61,13 @@ menuBar.on('ready', () => {
 
       Clipboard.getFilePaths()
         .then(head)
-        .then(filePath => {
-          const name = last(filePath.split(path.sep))
-          return readFile(filePath).then(buffer => ({ name, buffer }))
-        })
-        .then(({ name, buffer }) => {
-          emitFileCopy({ name, buffer })
-          Notification.sentFileCopy(name)
+        .then(path => ({ name: last(filePath.split(path.sep)), path }))
+        .then(({ name, path }) => {
+          fs.createReadStream(path)
+            .pipe(emitFileStream(name))
+            .on('end', () => {
+              Notification.sentFileCopy(name)
+            })
         })
         .catch(err => console.error(err))
 
