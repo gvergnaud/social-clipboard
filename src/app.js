@@ -33,9 +33,9 @@ menuBar.on('ready', () => {
     })
 
   fileStream$
-    .forEach(([ stream, name ]) => {
+    .forEach(([ stream, { name, size } ]) => {
       const filePath = path.resolve('files', name)
-      const progress = Progress({ time: 100 })
+      const progress = Progress({ length: size, time: 100 })
 
       stream
         .pipe(progress)
@@ -47,6 +47,9 @@ menuBar.on('ready', () => {
             name,
           }
           Notification.newFile(name)
+        })
+        .on('error', err => {
+          console.log('file receiving stopped', err)
         })
 
       createPercentObservable(progress)
@@ -83,7 +86,10 @@ menuBar.on('ready', () => {
 
           fs.createReadStream(filePath)
             .pipe(progress)
-            .pipe(emitFileStream(name))
+            .pipe(emitFileStream({ name, size }))
+            .on('error', err => {
+              console.log('file sending stopped', err)
+            })
 
           createPercentObservable(progress)
             .subscribe({
