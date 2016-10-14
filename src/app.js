@@ -22,12 +22,12 @@ menuBar.on('ready', () => {
 
   textCopy$
     .forEach(data => {
-    lastCopy = {
-      type: Copy.Text,
-      data
-    }
-    Notification.newTextCopy(data)
-  })
+      lastCopy = {
+        type: Copy.Text,
+        data
+      }
+      Notification.newTextCopy(data)
+    })
 
   fileCopy$
     .forEach(({ name, buffer }) => {
@@ -70,7 +70,6 @@ menuBar.on('ready', () => {
       const text = Clipboard.readText()
       Notification.sentTextCopy(text)
       emitTextCopy(text)
-
     }
 
 

@@ -11,7 +11,7 @@ import { log } from '../utils/debug'
  *
  * `npm rebuild --runtime=electron --target=1.4.3 --disturl=https://atom.io/download/atom-shell --abi=50`
  *
- * where 1.3.4 is your electron version and 49 is the abi it's expecting.
+ * where 1.4.3 is your electron version and 50 is the abi it's expecting.
  * @see https://github.com/electron-userland/electron-builder/issues/453#issuecomment-243341716
  */
 
@@ -29,8 +29,6 @@ const read = type => {
 }
 
 export const readFilenames = () => read($.NSFilenamesPboardType)
-
-export const readText = () => read($.NSStringPboardType)
 
 export const isFile = () => !!`${readFilenames()}`
 
@@ -77,5 +75,7 @@ export const onClipboardChange = f => {
   return () => clearInteval(interval)
 }
 
+
+export const readText = clipboard.readText
 
 export const writeText = clipboard.writeText
