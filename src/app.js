@@ -4,13 +4,12 @@ import { Menu, globalShortcut, webContents, ipcMain, ipcRender } from 'electron'
 import MenuBar from 'menubar'
 import { map, last, head } from 'lodash/fp'
 import fsPromise from 'fs-promise'
-import Progress from 'progress-stream'
 import { wait } from './utils/promises'
 import { emitTextCopy, textCopy$, emitFileStream, fileStream$ }  from './services/Socket'
 import * as Notification from './services/Notification'
 import * as Clipboard from './services/Clipboard'
 import { log } from './utils/debug'
-import { createPercentObservable } from './utils/files'
+import { createProgressHandler } from './utils/files'
 
 const menuBar = MenuBar({ tooltip: 'clipboard' })
 
@@ -35,7 +34,7 @@ menuBar.on('ready', () => {
   fileStream$
     .forEach(([ stream, { name, size } ]) => {
       const filePath = path.resolve('files', name)
-      const progress = Progress({ length: size, time: 100 })
+      const { progress, percent$ } = createProgressHandler(size)
 
       stream
         .pipe(progress)
@@ -52,10 +51,9 @@ menuBar.on('ready', () => {
           console.log('file receiving stopped', err)
         })
 
-      createPercentObservable(progress)
-        .forEach(percentage => {
-          Notification.receiveFileProgress({ name, percentage })
-        })
+      percent$.forEach(percentage => {
+        Notification.receiveFileProgress({ name, percentage })
+      })
     })
 
 
@@ -82,7 +80,7 @@ menuBar.on('ready', () => {
             }))
         )
         .then(({ name, filePath, size }) => {
-          const progress = Progress({ length: size, time: 100 })
+          const { progress, percent$ } = createProgressHandler(size)
 
           fs.createReadStream(filePath)
             .pipe(progress)
@@ -91,13 +89,11 @@ menuBar.on('ready', () => {
               console.log('file sending stopped', err)
             })
 
-          createPercentObservable(progress)
-            .subscribe({
-              complete: () => Notification.fileSent(name),
-              next: percentage => Notification.sendFileProgress({ name, percentage }),
-              error: err => console.log('Progress error :', err),
-            })
-
+          percent$.subscribe({
+            complete: () => Notification.fileSent(name),
+            next: percentage => Notification.sendFileProgress({ name, percentage }),
+            error: err => console.log('Progress error :', err),
+          })
         })
         .catch(err => console.error(err))
 
@@ -106,6 +102,7 @@ menuBar.on('ready', () => {
       const text = Clipboard.readText()
       emitTextCopy(text)
       Notification.textCopySent(text)
+      
     }
 
   })
