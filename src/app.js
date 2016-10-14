@@ -31,17 +31,16 @@ menuBar.on('ready', () => {
 
   fileStream$
     .forEach(([ stream, name ]) => {
-      const filePath = path.resolve('file', name)
+      const filePath = path.resolve('files', name)
 
       stream
         .pipe(fs.createWriteStream(filePath))
-        .on('end', () => {
+        .on('close', () => {
           lastCopy = {
             type: Copy.File,
-            path: filePath,
+            filePath,
             name,
           }
-
           Notification.newFileCopy(name)
         })
     })
@@ -61,9 +60,9 @@ menuBar.on('ready', () => {
 
       Clipboard.getFilePaths()
         .then(head)
-        .then(path => ({ name: last(filePath.split(path.sep)), path }))
-        .then(({ name, path }) => {
-          fs.createReadStream(path)
+        .then(filePath => ({ name: last(filePath.split(path.sep)), filePath }))
+        .then(({ name, filePath }) => {
+          fs.createReadStream(filePath)
             .pipe(emitFileStream(name))
             .on('end', () => {
               Notification.sentFileCopy(name)
@@ -88,7 +87,7 @@ menuBar.on('ready', () => {
         Clipboard.writeText(lastCopy.data)
         break
       case Copy.File:
-        Clipboard.writeFileWithPath(lastCopy.path)
+        Clipboard.writeFileWithPath(lastCopy.filePath)
         break
     }
   })
