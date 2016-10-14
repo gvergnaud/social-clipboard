@@ -16,6 +16,7 @@
     "node-notifier": "^4.6.1",
     "nodobjc": "^2.1.0",
     "notifier": "^0.1.7",
+    "progress-stream": "^1.2.0",
     "rxjs": "^5.0.0-beta.12",
     "socket.io-client": "^1.5.0",
     "socket.io-stream": "^0.9.1",
