@@ -36,7 +36,7 @@ export const getFilePaths = () => new Promise((resolve, reject) => {
   parseXMLString(readFilenames(), function (err, result) {
     if (err) return reject(err)
     try {
-      const paths = resolve(result.plist.array[0].string)
+      resolve(result.plist.array[0].string)
     } catch (e) {
       reject(new Error('getClipboardFilePaths : no files in clipboard'))
     }
@@ -45,11 +45,10 @@ export const getFilePaths = () => new Promise((resolve, reject) => {
 
 // writeFileWithPath :: String -> Boolean
 export const writeFileWithPath = path => {
-  const nsStringPath = $.NSString('stringWithUTF8String', path)
-  const object = $.NSURL('alloc')('initFileURLWithPath', nsStringPath)
-
   pb('clearContents')
 
+  const nsStringPath = $.NSString('stringWithUTF8String', path)
+  const object = $.NSURL('alloc')('initFileURLWithPath', nsStringPath)
   const objectsToCopy = $.NSMutableArray('alloc')('init')
 
   objectsToCopy('addObject', object)
