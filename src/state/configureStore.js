@@ -2,11 +2,11 @@ import { createStore, compose, applyMiddleware } from 'redux'
 import { createEpicMiddleware } from 'redux-observable'
 import rootReducer from './reducers'
 import rootEpic from './epics'
-import DevTools from '../app/containers/DevTools'
+import createLogger from 'redux-logger'
 
-const enhancer = compose(
-  applyMiddleware(createEpicMiddleware(rootEpic)),
-  process.env.NODE_ENV === 'development' ? DevTools.instrument() : x => x
+const enhancer = applyMiddleware(
+  createEpicMiddleware(rootEpic),
+  createLogger()
 )
 
 export default function configureStore(initialState) {

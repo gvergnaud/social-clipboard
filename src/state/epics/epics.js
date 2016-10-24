@@ -1,21 +1,15 @@
 import fs from 'fs'
 import path from 'path'
 import { last, head } from 'lodash/fp'
+import { Observable } from 'rxjs'
 import { combineEpics } from 'redux-observable'
 import { emitTextCopy, textCopy$, emitFileStream, fileStream$ } from '../../services/Socket'
 import * as Notification from '../../services/Notification'
 import * as Clipboard from '../../services/Clipboard'
 import { createProgressHandler } from '../../utils/nodeStreams'
 import { fileStat } from '../../utils/files'
-import {
-  SEND_CLIPBOARD_CONTENT,
-  COPY_TO_CLIPBOARD,
-  receiveText,
-  receiveFile,
-  lastCopySelector,
-  isTextCopy,
-  isFileCopy,
-} from '../modules/history'
+import { lastCopySelector, isTextCopy, isFileCopy, } from '../modules/history'
+import { SEND_CLIPBOARD_CONTENT, COPY_TO_CLIPBOARD, receiveText, receiveFile } from '../actions'
 import { noopAction } from '../../utils/moduleHelpers'
 
 
@@ -99,7 +93,7 @@ const copyTextEpic = (action$, store) =>
 
 
 const copyFileEpic = action$ =>
-    action$.ofType(COPY_TO_CLIPBOARD)
+  action$.ofType(COPY_TO_CLIPBOARD)
     .map(() => lastCopySelector(store.getState()))
     .filter(copy => isFileCopy(copy))
     .do(copy => Clipboard.writeFileWithPath(copy.filePath))

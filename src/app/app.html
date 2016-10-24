@@ -7,13 +7,11 @@
   <body>
     <div id="mount"></div>
     <script>
-      {
-        const script = document.createElement('script')
-        const port = process.env.PORT || 3000
-        const isDev = process.env.NODE_ENV === 'development'
-        script.src = isDev ? `http://localhost:${port}/dist/bundle.js` : '../../dist/bundle.js'
-        document.body.appendChild(script)
-      }
+      const isDev = process.env.NODE_ENV === 'development'
+      const script = document.createElement('script')
+      const port = process.env.PORT || 3000
+      script.src = isDev ? `http://localhost:${port}/dist/bundle.js` : './dist/bundle.js'
+      document.body.appendChild(script)
     </script>
   </body>
 </html>

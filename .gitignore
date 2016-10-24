@@ -4,3 +4,5 @@ dist
 node_modules
 files/**
 !files/.gitkeep
+npm-debug.log
+npm-debug.log*

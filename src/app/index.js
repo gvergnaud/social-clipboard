@@ -3,6 +3,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import App from 'app/containers/App'
+import './scss/global.scss'
 
 const bootstrap = (RootComponent) => {
   const store = remote.getGlobal('store')
@@ -15,11 +16,6 @@ const bootstrap = (RootComponent) => {
     </Provider>,
     document.querySelector('#mount')
   )
-
-  console.log(process.env.NODE_ENV)
-  if (process.env.NODE_ENV === 'development') {
-    require('./createDevToolsWindow').default(store) // eslint-disable-line
-  }
 }
 
 bootstrap(App)

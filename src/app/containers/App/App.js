@@ -1,8 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-import cx from 'classnames'
+import classNames from 'classnames/bind'
 import prop from 'lodash/fp/prop'
 import { connect } from 'react-redux'
 import { historySelector, isTextCopy } from 'state/modules/history'
+import styles from './App.scss'
+
+const cx = classNames.bind(styles)
 
 const enhancer = connect(state => ({
   history: historySelector(state)
@@ -10,6 +13,7 @@ const enhancer = connect(state => ({
 
 const App = ({ history }) => (
   <div className={cx('App')}>
+    <h1>Clipboard history</h1>
     <ul>
       {history
         .filter(x => isTextCopy(x))
