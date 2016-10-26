@@ -15,9 +15,9 @@ module.exports = Object.assign({}, baseConfig, {
     './src/app/index'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'build'),
     filename: 'bundle.js',
-    publicPath: `http://localhost:${port}/dist/`
+    publicPath: `http://localhost:${port}/build/`
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -28,12 +28,12 @@ module.exports = Object.assign({}, baseConfig, {
       {
         test: /\.js$/,
         loaders: ['babel'],
-        include: path.join(__dirname, path.join('src'))
+        include: path.join(__dirname, 'src')
       },
       { test: /\.scss$/,
         loader: 'style!css?module&localIdentName=[local]__[hash:base64:5]' +
           '&sourceMap!postcss-loader!sass?sourceMap&outputStyle=expanded' +
-          '&includePaths[]=' + encodeURIComponent(path.resolve(__dirname, path.join('src')))
+          '&includePaths[]=' + encodeURIComponent(path.resolve('src'))
       },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
       { test: /\.json$/, loader: 'json-loader' },

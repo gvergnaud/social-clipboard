@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const autoprefixer = require('autoprefixer')
 const baseConfig = require('./webpack.config.base.js')
 
@@ -9,9 +10,9 @@ module.exports = Object.assign({}, baseConfig, {
     './src/app/index'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'build'),
     filename: 'bundle.js',
-    publicPath: '/dist/'
+    publicPath: '/build/'
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
@@ -24,7 +25,8 @@ module.exports = Object.assign({}, baseConfig, {
       compressor: {
         warnings: false
       }
-    })
+    }),
+    new ExtractTextPlugin('main.css'),
   ],
   module: {
     loaders: [
@@ -34,9 +36,8 @@ module.exports = Object.assign({}, baseConfig, {
         include: path.resolve('src')
       },
       { test: /\.scss$/,
-        loader: 'style!css?module&localIdentName=[hash:base64:5]' +
-          '&sourceMap!postcss-loader!sass?sourceMap&outputStyle=expanded' +
-          '&includePaths[]=' + encodeURIComponent(path.resolve('src'))
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module&localIdentName=[hash:base64:5]!postcss-loader!sass?includePaths[]='
+          + encodeURIComponent(path.resolve('src')))
       },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
       { test: /\.json$/, loader: 'json-loader' },
