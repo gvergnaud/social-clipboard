@@ -13,7 +13,7 @@ const enhancer = connect(state => ({
 
 const App = ({ history }) => (
   <div className={cx('App')}>
-    <h1>Clipboard history</h1>
+    <h1 className={cx('App-title')}>Clipboard history</h1>
     <ul>
       {history
         .filter(x => isTextCopy(x))

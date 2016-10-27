@@ -11,13 +11,11 @@
     "build:webpack": "NODE_ENV=production webpack --config webpack.config.prod.js",
     "build": "npm run clean && npm run build:webpack && npm run package",
     "abi": "npm rebuild --runtime=electron --target=1.4.4 --disturl=https://atom.io/download/atom-shell --abi=50",
-    "package": "build --dir"
+    "package": "build"
   },
   "build": {
-    "appId": "app.electron.clipboard",
-    "mac": {
-      "category": "your.app.category.type"
-    },
+    "appId": "com.gabrielvergnaud.clipboard",
+    "category": "your.app.category.type",
     "asar": false
   },
   "dependencies": {
@@ -29,10 +27,8 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-register": "^6.16.3",
-    "body-parser": "^1.15.2",
     "classnames": "^2.2.5",
     "electron-debug": "^1.0.1",
-    "express": "^4.14.0",
     "fs-promise": "^0.5.0",
     "keypress": "^0.2.1",
     "lodash": "^4.16.4",
@@ -54,7 +50,9 @@
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
+    "7zip-bin-mac": "^1.0.1",
     "autoprefixer": "^6.5.1",
+    "body-parser": "^1.15.2",
     "css-loader": "^0.25.0",
     "electron": "^1.4.4",
     "electron-builder": "^7.14.2",
@@ -64,6 +62,7 @@
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
+    "express": "^4.14.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "json-loader": "^0.5.4",

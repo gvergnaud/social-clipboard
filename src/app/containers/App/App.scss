@@ -1,5 +1,12 @@
 @import '../../scss/variables.scss';
 
+h1 {
+  color: #aaa;
+  font-weight: lighter;
+  font-size: 2rem;
+  line-height: 3rem;
+}
+
 #mount {
   position: relative;
 }
@@ -29,5 +36,9 @@
   	border-bottom-color: $white-bg;
   	border-width: 8px;
   	margin-left: -8px;
+  }
+
+  &-title {
+    margin-top: 0;
   }
 }
