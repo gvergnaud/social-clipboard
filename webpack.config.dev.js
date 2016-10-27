@@ -15,9 +15,9 @@ module.exports = Object.assign({}, baseConfig, {
     './src/app/index'
   ],
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'app', 'dist'),
     filename: 'bundle.js',
-    publicPath: `http://localhost:${port}/build/`
+    publicPath: `http://localhost:${port}/app/dist`
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

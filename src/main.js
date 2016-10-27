@@ -5,7 +5,7 @@ import { sendClipboardContent, copyToClipboard } from './state/actions'
 import * as Clipboard from './services/Clipboard'
 import configureStore from './state/configureStore'
 
-require('electron-debug')({ showDevTools: true, enabled: true })
+require('electron-debug')({ showDevTools: true })
 
 global.store = configureStore()
 
