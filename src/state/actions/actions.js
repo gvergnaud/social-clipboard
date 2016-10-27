@@ -27,7 +27,9 @@ export const receiveText = text => ({
   type: RECEIVE,
   payload: {
     type: Copy.Text,
-    text
+    payload: {
+      text
+    }
   }
 })
 
@@ -35,7 +37,9 @@ export const receiveFile = (filePath, name) => ({
   type: RECEIVE,
   payload: {
     type: Copy.File,
-    filePath,
-    name
+    payload: {
+      filePath,
+      name
+    }
   }
 })
