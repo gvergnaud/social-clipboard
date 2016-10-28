@@ -7,11 +7,11 @@ import { emitTextCopy, textCopy$, emitFileStream, fileStream$ } from '../../serv
 import * as Notification from '../../services/Notification'
 import * as Clipboard from '../../services/Clipboard'
 import { createProgressHandler } from '../../utils/nodeStreams'
-import { fileStat } from '../../utils/files'
+import { fsPromise } from '../../utils/files'
 import { lastCopySelector, isTextCopy, isFileCopy, } from '../modules/history'
 import { SEND_CLIPBOARD_CONTENT, COPY_TO_CLIPBOARD, receiveText, receiveFile } from '../actions'
 import { noopAction } from '../../utils/moduleHelpers'
-
+import { downloadsFolderPath, createDownloadFolderIfDoesntExist } from '../../utils/files'
 
 const receiveTextEpic = () =>
   textCopy$
@@ -20,9 +20,10 @@ const receiveTextEpic = () =>
 
 const receiveFileEpic = () =>
   fileStream$
+    .do(createDownloadFolderIfDoesntExist)
     .flatMap(([ stream, { name, size } ]) =>
       Observable.fromPromise(new Promise((resolve, reject) => {
-        const filePath = path.resolve('files', name)
+        const filePath = path.join(downloadsFolderPath, name)
         const { progress, percent$ } = createProgressHandler(size)
 
         stream
@@ -55,7 +56,7 @@ const sendFileEpic = action$ =>
         Clipboard.getFilePaths()
           .then(head)
           .then(filePath =>
-            fileStat(filePath)
+            fsPromise.fileStat(filePath)
               .then(stat => ({
                 filePath,
                 size: stat.size,
