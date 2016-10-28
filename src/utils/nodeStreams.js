@@ -1,5 +1,5 @@
 import Progress from 'progress-stream'
-import {Observable} from 'rxjs'
+import { Observable } from 'rxjs'
 
 export const createProgressHandler = size => {
   const progress = Progress({ length: size, time: 100 })
@@ -20,7 +20,6 @@ const createProgressObservable = progress => new Observable(observer => {
 
   return { unsubscribe: () => { isSubscribed = false } }
 })
-
 
 export const createPercentObservable = progress =>
   createProgressObservable(progress)

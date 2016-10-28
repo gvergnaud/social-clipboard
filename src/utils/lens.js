@@ -26,7 +26,6 @@ export const identityLens = createLens(
   '_' // no key needed
 )
 
-
 // lensProp :: String -> Functor f -> Object -> f Object
 export const lensProp = createLens(
   (key, obj) => obj[key],

@@ -1,6 +1,6 @@
 import compose from 'lodash/fp/compose'
 
-export const composeTransformations = (...mutations) => (state, action) =>
+export const composeMutations = (...mutations) => (state, action) =>
   mutations.reduceRight((mutatedState, mutation) => mutation(mutatedState, action), state)
 
 export const createReducer = (initialState, handlers) =>
@@ -17,13 +17,10 @@ export const log = (state, action) => {
 }
 /* eslint-disable */
 
-export const nothing = (state) => state
-
 export const createAsyncTypes = (constant) => ({
   REQUEST: `${constant}.REQUEST`,
   SUCCESS: `${constant}.SUCCESS`,
   ERROR: `${constant}.ERROR`
 })
-
 
 export const noopAction = () => ({ type: 'NOOP' })

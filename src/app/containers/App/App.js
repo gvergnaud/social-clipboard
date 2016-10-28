@@ -4,7 +4,7 @@ import prop from 'lodash/fp/prop'
 import compose from 'lodash/fp/compose'
 import { connect } from 'react-redux'
 import { historySelector } from 'state/modules/history'
-import { Copy } from 'state/actions'
+import { Copy } from 'state/actions/historyActions'
 import { extract, cata } from 'utils/actions'
 import styles from './App.scss'
 
@@ -20,8 +20,8 @@ const App = ({ history }) => (
     <ul>
       {history
         .map(compose(extract, cata({
-          [Copy.Text]: payload => payload.text,
-          [Copy.File]: payload => payload.name,
+          [Copy.Text]: copy => copy.text,
+          [Copy.File]: copy => copy.name,
         })))
         .map((text, i) =>
           <li key={i}>{text.slice(0, 50)}...</li>

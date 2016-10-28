@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 import ss from 'socket.io-stream'
-import {Observable} from 'rxjs'
+import { Observable } from 'rxjs'
 
 const socket = io('https://cl1pboard.herokuapp.com')
 // const socket = io('http://localhost:3000')

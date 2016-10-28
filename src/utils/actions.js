@@ -1,4 +1,6 @@
-export const cata = cases => action =>
+import curry from 'lodash/fp/curry'
+
+export const cata = curry((cases, action) =>
   Object
     .keys(cases)
     .filter(type => type === action.type)
@@ -7,6 +9,6 @@ export const cata = cases => action =>
       type: action.type,
       payload: mapper(action.payload)
     }), null)
-
+)
 export const extract = action =>
   action.payload

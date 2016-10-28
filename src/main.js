@@ -1,8 +1,6 @@
-import { Subject } from 'rxjs'
 import { globalShortcut } from 'electron'
 import MenuBar from 'menubar'
-import { sendClipboardContent, copyToClipboard } from './state/actions'
-import * as Clipboard from './services/Clipboard'
+import { sendClipboardContent, copyToClipboard } from './state/actions/globalShortcutAction'
 import configureStore from './state/configureStore'
 
 require('electron-debug')({ showDevTools: false })
