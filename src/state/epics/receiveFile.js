@@ -40,14 +40,16 @@ const createFileActionsObservable = (stream, { name, size }) => new Observable(o
       observer.complete()
     })
 
-  percent$.forEach(percentage => {
-    next(fileDownloadProgressAction(percentage))
+  const percentSub = percent$.subscribe({
+    next: percentage => {
+      next(fileDownloadProgressAction(percentage))
+    }
   })
 
   return {
     unsubscribe: () => {
       isActive = false
-      percent$.unsubscribe()
+      percentSub.unsubscribe()
     }
   }
 })
