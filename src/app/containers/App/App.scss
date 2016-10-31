@@ -1,15 +1,6 @@
 @import '../../scss/variables.scss';
 
-h1 {
-  color: #aaa;
-  font-weight: lighter;
-  font-size: 2rem;
-  line-height: 3rem;
-}
-
-#mount {
-  position: relative;
-}
+$header-height: 80px;
 
 .App {
   position: absolute;
@@ -17,7 +8,6 @@ h1 {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px;
 
   font-family: Arial, sans-serif;
   background-color: $white-bg;
@@ -40,5 +30,15 @@ h1 {
 
   &-title {
     margin-top: 0;
+  }
+
+  &-header {
+    height: $header-height;
+    padding: 10px 15px;
+  }
+
+  &-content {
+    overflow: auto;
+    max-height: calc(100% - #{$header-height});
   }
 }
