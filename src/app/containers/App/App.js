@@ -4,8 +4,7 @@ import prop from 'lodash/fp/prop'
 import compose from 'lodash/fp/compose'
 import { connect } from 'react-redux'
 import { historySelector } from 'state/modules/history'
-import { Copy } from 'state/actions/historyActions'
-import { extract, cata } from 'utils/actions'
+import { Copy, extract, cata } from 'utils/copy'
 import styles from './App.scss'
 
 const cx = classNames.bind(styles)

@@ -18,8 +18,9 @@ export const progress = percent => ({
   payload: { percent }
 })
 
-export const success = percent => ({
-  type: SUCCESS
+export const success = () => ({
+  type: SUCCESS,
+  payload: { percent: 100 }
 })
 
 export const error = error => ({

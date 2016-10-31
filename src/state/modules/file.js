@@ -1,4 +1,5 @@
 import { createReducer, composeMutations } from '../../utils/moduleHelpers'
+import { log } from '../../utils/debug'
 import { set, lensProp } from '../../utils/lens'
 import { START, PROGRESS, SUCCESS, ERROR, Status } from '../actions/fileActions'
 
@@ -14,7 +15,7 @@ const initialState = {
   name: '',
   status: Status.Downloading,
   progressPercent: 0,
-  error: {},
+  error: null,
 }
 
 const setCreatedAt = state =>
@@ -26,17 +27,17 @@ const setStartedAt = state =>
 const setEndedAt = state =>
   set(lensProp('endedAt'), Date.now(), state)
 
-const setFilePath = (state, payload) =>
-  set(lensProp('filePath'), payload.filePath, state)
+const setFilePath = (state, action) =>
+  set(lensProp('filePath'), action.payload.filePath, state)
 
-const setName = (state, payload) =>
-  set(lensProp('name'), payload.name, state)
+const setName = (state, action) =>
+  set(lensProp('name'), action.payload.name, state)
 
-const setPercent = (state, payload) =>
-  set(lensProp('progressPercent'), payload.percent, state)
+const setPercent = (state, action) =>
+  set(lensProp('progressPercent'), action.payload.percent, state)
 
-const setError = (state, payload) =>
-  set(lensProp('error'), payload.error, state)
+const setError = (state, action) =>
+  set(lensProp('error'), action.payload.error, state)
 
 const setStatus = status => state =>
   set(lensProp('status'), status, state)
@@ -45,6 +46,6 @@ const setStatus = status => state =>
 export default createReducer(initialState, {
   [START]: composeMutations(setCreatedAt, setStartedAt, setFilePath, setName, setStatus(Status.Downloading)),
   [PROGRESS]: composeMutations(setPercent, setStatus(Status.Downloading)),
-  [SUCCESS]: composeMutations(setEndedAt, setStatus(Status.Success)),
+  [SUCCESS]: composeMutations(setEndedAt, setPercent, setStatus(Status.Success)),
   [ERROR]: composeMutations(setError, setStatus(Status.Error)),
 })

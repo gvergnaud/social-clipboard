@@ -4,15 +4,16 @@ import shortId from 'shortid'
 import { Observable } from 'rxjs'
 import { fileStream$ } from '../../services/Socket'
 import { downloadsFolderPath, createDownloadFolderIfDoesntExist } from '../../utils/files'
+import { createFileCopy } from '../../utils/copy'
 import { createProgressHandler } from '../../utils/nodeStreams'
-import { create, update, file } from '../actions/historyActions'
+import { create, update } from '../actions/historyActions'
 import { start, progress, success, error } from '../actions/fileActions'
 
 
-const startFileDownloadAction = (id, filePath, name) => create(id, file(start(filePath, name)))
-const fileDownloadProgressAction = (id, percent) => create(id, file(progress(percent)))
-const fileDownloadSuccessAction = id => update(id, file(success()))
-const fileDownloadErrorAction = (id, err) => update(id, file(error(err)))
+const startFileDownloadAction = (id, filePath, name) => create(id, createFileCopy(start(filePath, name)))
+const fileDownloadProgressAction = (id, percent) => update(id, createFileCopy(progress(percent)))
+const fileDownloadSuccessAction = id => update(id, createFileCopy(success()))
+const fileDownloadErrorAction = (id, err) => update(id, createFileCopy(error(err)))
 
 
 const createFileActionsObservable = (stream, { name, size }) => new Observable(observer => {
@@ -31,7 +32,7 @@ const createFileActionsObservable = (stream, { name, size }) => new Observable(o
   stream
     .pipe(progressTransform)
     .pipe(fs.createWriteStream(filePath))
-    .on('close', () => {
+    .on('finish', () => {
       next(fileDownloadSuccessAction(copyId))
       observer.complete()
     })
@@ -42,7 +43,7 @@ const createFileActionsObservable = (stream, { name, size }) => new Observable(o
 
   const percentSub = percent$.subscribe({
     next: percentage => {
-      next(fileDownloadProgressAction(percentage))
+      next(fileDownloadProgressAction(copyId, percentage))
     }
   })
 

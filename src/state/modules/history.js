@@ -1,8 +1,8 @@
 import values from 'lodash/fp/values'
 import { createReducer, composeMutations } from '../../utils/moduleHelpers'
 import { set, over, lensProps } from '../../utils/lens'
-import { extract, cata } from '../../utils/actions'
-import { CREATE, UPDATE, REMOVE, Copy } from '../actions/historyActions'
+import { Copy, extract, cata } from '../../utils/copy'
+import { CREATE, UPDATE, REMOVE } from '../actions/historyActions'
 import textReducer from './text'
 import fileReducer from './file'
 
@@ -18,14 +18,20 @@ const initialState = {
 const updateLastId = (state, action) =>
   set(lensProps('lastId'), action.payload.id, state)
 
-const updateCopy = (state, action) => cata({
+const updateCopy = (state, copy) => cata({
   [Copy.File]: copyAction => fileReducer(state, copyAction),
   [Copy.Text]: copyAction => textReducer(state, copyAction),
-}, action)
+}, copy)
 
-const updateHistory = (state, action) => over(
+const createHistoryEntry = (state, action) => set(
   lensProps('history', action.payload.id),
-  copyState => updateCopy(copyState, action.payload.data),
+  updateCopy(undefined, action.payload.copy),
+  state
+)
+
+const updateHistoryEntry = (state, action) => over(
+  lensProps('history', action.payload.id),
+  copyState => updateCopy(extract(copyState), action.payload.copy),
   state
 )
 
@@ -33,8 +39,8 @@ const removeCopy = (state, action) =>
   set(lensProps('history', action.payload.id), undefined, state)
 
 export default createReducer(initialState, {
-  [CREATE]: composeMutations(updateLastId, updateHistory),
-  [UPDATE]: composeMutations(updateHistory),
+  [CREATE]: composeMutations(updateLastId, createHistoryEntry),
+  [UPDATE]: composeMutations(updateHistoryEntry),
   [REMOVE]: removeCopy,
 })
 
@@ -45,7 +51,3 @@ export default createReducer(initialState, {
 export const lastCopySelector = state => state.history.history[state.history.lastId]
 
 export const historySelector = state => values(state.history.history)
-
-export const isTextCopy = copy => copy.type === Copy.Text
-
-export const isFileCopy = copy => copy.type === Copy.File

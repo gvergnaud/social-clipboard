@@ -1,12 +1,14 @@
-import { createStore, compose, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { createEpicMiddleware } from 'redux-observable'
 import rootReducer from './reducers'
 import rootEpic from './epics'
-import createLogger from 'redux-logger'
+import errorCatcherMiddleware from './middleware/errorCatcherMiddleware'
+import sendStateStatusMiddleware from './middleware/sendStateStatusMiddleware'
 
 const enhancer = applyMiddleware(
+  errorCatcherMiddleware,
   createEpicMiddleware(rootEpic),
-  createLogger()
+  sendStateStatusMiddleware
 )
 
 export default function configureStore(initialState) {
