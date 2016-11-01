@@ -23,7 +23,6 @@ const createProgressObservable = progress => new Observable(observer => {
 
 export const createPercentObservable = progress =>
   createProgressObservable(progress)
-    .throttleTime(1000)
     .pluck('percentage')
     .map(Math.round)
     .distinctUntilChanged()

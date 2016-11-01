@@ -1,6 +1,7 @@
 import { COPY_TO_CLIPBOARD } from '../actions/globalShortcutAction'
-import { lastCopySelector, isTextCopy } from '../modules/history'
+import { lastCopySelector } from '../modules/history'
 import * as Clipboard from '../../services/Clipboard'
+import { isTextCopy } from '../../utils/copy'
 import { noopAction } from '../../utils/moduleHelpers'
 
 

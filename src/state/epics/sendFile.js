@@ -10,6 +10,8 @@ import * as Notification from '../../services/Notification'
 import { emitFileStream } from '../../services/Socket'
 import { SEND_CLIPBOARD_CONTENT } from '../actions/globalShortcutAction'
 
+const fsStat = promisify(fs.stat)
+
 const sendFileEpic = action$ =>
   action$.ofType(SEND_CLIPBOARD_CONTENT)
     .filter(() => Clipboard.isFile())
@@ -18,7 +20,7 @@ const sendFileEpic = action$ =>
         Clipboard.getFilePaths()
           .then(head)
           .then(filePath =>
-            promisify(fs.stat)(filePath)
+            fsStat(filePath)
               .then(stat => ({
                 filePath,
                 size: stat.size,
@@ -34,11 +36,13 @@ const sendFileEpic = action$ =>
                 .pipe(emitFileStream({ name, size }))
                 .on('error', err => reject(err))
 
-              percent$.subscribe({
-                complete: () => resolve(name),
-                next: percentage => Notification.sendFileProgress({ name, percentage }),
-                error: reject,
-              })
+              percent$
+                .throttleTime(1000)
+                .subscribe({
+                  complete: () => resolve(name),
+                  next: percentage => Notification.sendFileProgress({ name, percentage }),
+                  error: reject,
+                })
             })
           )
         )

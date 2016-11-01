@@ -1,11 +1,9 @@
 import compose from 'lodash/fp/compose'
 import curry from 'lodash/fp/curry'
 import reduce from 'lodash/fp/reduce'
+import map from 'lodash/fp/map'
 import Const, { getConst } from './functors/Const'
 import Identity, { runIdentity } from './functors/Identity'
-
-
-const map = curry((mapper, x) => x.map(mapper))
 
 /* ----------------------------------------- *
         Lenses définition
@@ -48,10 +46,10 @@ export const num = createLens(
   (index, value, arr) => [ ...arr.split(0, index), value, ...arr.split(index + 1) ]
 )
 
-// mapped :: Functor f -> Setter (f a) (f b) a b
+// mapped :: (a -> Identity b) -> [a] -> Identity [b]
 export const mapped = curry((f, xs) => Identity.of(map(compose(runIdentity, f), xs)))
 
-// // mappedValues :: Functor f -> Setter (f a) (f b) a b
+// mappedValues :: (a -> Identity b) -> { [String]: a } -> Identity { [String]: b }
 export const mappedValues = curry((f, obj) => Identity.of(reduce((acc, key) => ({
   ...acc,
   [key]: compose(runIdentity, f)(obj[key]),

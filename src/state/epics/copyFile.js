@@ -1,7 +1,8 @@
 import { COPY_TO_CLIPBOARD } from '../actions/globalShortcutAction'
-import { lastCopySelector, isFileCopy } from '../modules/history'
+import { lastCopySelector } from '../modules/history'
 import * as Clipboard from '../../services/Clipboard'
 import { noopAction } from '../../utils/moduleHelpers'
+import { isFileCopy } from '../../utils/copy'
 
 
 const copyFileEpic = (action$, store) =>
