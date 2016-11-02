@@ -10,8 +10,6 @@ import styles from './Inbox.scss'
 
 const cx = classNames.bind(styles)
 
-const copyCreatedAtTimestamp = copy => new Date(extract(copy).createdAt).getTime()
-
 const Inbox = ({ history }) => (
   <div className={cx('Inbox')}>
     {history
@@ -19,7 +17,7 @@ const Inbox = ({ history }) => (
         [Copy.Text]: copyValue => ({ ...copyValue, id }),
         [Copy.File]: copyValue => ({ ...copyValue, id })
       }, copy))
-      .sort((a, b) => copyCreatedAtTimestamp(b) - copyCreatedAtTimestamp(a))
+      .sort((a, b) => extract(b).createdAt - extract(a).createdAt)
       .map((copy, i) =>
         <div key={i} className={cx('Inbox-row')}>
           {extract(cata({

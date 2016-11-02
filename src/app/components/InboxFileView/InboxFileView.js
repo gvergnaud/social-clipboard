@@ -10,7 +10,18 @@ const cx = classNames.bind(styles)
 
 const enhancer = hover()
 
-const InboxFileView = ({ filePath, name, onCopy, isHover }) => (
+const InboxFileView = ({
+  filePath,
+  name,
+  onCopy,
+  isHover,
+  createdAt,
+  startedAt,
+  endedAt,
+  status,
+  progressPercent,
+  error,
+}) => (
   <div
     className={cx('InboxFileView')}
     onClick={onCopy}>
@@ -24,6 +35,12 @@ InboxFileView.propTypes = {
   name: PropTypes.string.isRequired,
   isHover: PropTypes.bool.isRequired,
   onCopy: PropTypes.func.isRequired,
+  createdAt: PropTypes.number.isRequired,
+  startedAt: PropTypes.number.isRequired,
+  endedAt: PropTypes.number.isRequired,
+  status: PropTypes.string.isRequired,
+  progressPercent: PropTypes.number.isRequired,
+  error: PropTypes.object,
 }
 
 

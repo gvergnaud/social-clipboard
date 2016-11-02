@@ -10,7 +10,12 @@ const cx = classNames.bind(styles)
 
 const enhancer = hover()
 
-const InboxTextView = ({ text, onCopy, isHover }) => (
+const InboxTextView = ({
+  text,
+  createdAt,
+  isHover,
+  onCopy,
+}) => (
   <div
     className={cx('InboxTextView')}
     onClick={onCopy}>
@@ -20,8 +25,9 @@ const InboxTextView = ({ text, onCopy, isHover }) => (
 
 InboxTextView.propTypes = {
   text: PropTypes.string.isRequired,
-  onCopy: PropTypes.func.isRequired,
+  createdAt: PropTypes.number.isRequired,
   isHover: PropTypes.bool.isRequired,
+  onCopy: PropTypes.func.isRequired,
 }
 
 
