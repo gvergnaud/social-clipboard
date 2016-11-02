@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import shortId from 'shortid'
 import { Observable } from 'rxjs'
+import { last, dropRight } from 'lodash/fp'
 import { fileStream$ } from '../../services/Socket'
 import { downloadsFolderPath, createDownloadFolderIfDoesntExist } from '../../utils/files'
 import { createFileCopy } from '../../utils/copy'
@@ -17,9 +18,13 @@ const fileDownloadErrorAction = (id, err) => update(id, createFileCopy(error(err
 
 
 const createFileActionsObservable = (stream, { name, size }) => new Observable(observer => {
-  let isActive = true
+  const extension = last(name.split('.'))
+  const nameWithoutExtension = dropRight(1, name.split('.')).join('')
+  const filePath =
+    fs.existsSync(path.join(downloadsFolderPath, name))
+      ? path.join(downloadsFolderPath, `${nameWithoutExtension}_1.${extension}`)
+      : path.join(downloadsFolderPath, name)
 
-  const filePath = path.join(downloadsFolderPath, name)
   const { progress: progressTransform, percent$ } = createProgressHandler(size)
   const copyId = shortId.generate()
 

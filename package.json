@@ -34,6 +34,7 @@
     "keypress": "^0.2.1",
     "lodash": "^4.16.4",
     "menubar": "^5.1.0",
+    "moment": "^2.15.2",
     "node-notifier": "^4.6.1",
     "nodobjc": "^2.1.0",
     "notifier": "^0.1.7",

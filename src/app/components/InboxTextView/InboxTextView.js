@@ -1,12 +1,15 @@
 import React, { PropTypes } from 'react'
+import moment from 'moment'
 import classNames from 'classnames/bind'
 
 import hover from '../../decorators/hover'
 
 import styles from './InboxTextView.scss'
+import inboxItemStyles from '../../scss/InboxItem.scss'
 
 
 const cx = classNames.bind(styles)
+const cy = classNames.bind(inboxItemStyles)
 
 const enhancer = hover()
 
@@ -17,9 +20,13 @@ const InboxTextView = ({
   onCopy,
 }) => (
   <div
-    className={cx('InboxTextView')}
+    className={`${cy('InboxItem')} ${cx('InboxTextView')}`}
     onClick={onCopy}>
-    <p className={cx('InboxTextView-text')}>{isHover ? 'Click To Copy!' : text}</p>
+    <p className={cy('InboxItem-name')}>{text}</p>
+    <div className={cy('InboxItem-info')}>
+      <p className={cy('InboxItem-info-user')}>{'Anonymous'}</p>
+      <p className={cy('InboxItem-info-date')}>{isHover ? 'Click To Copy!' : moment(createdAt).fromNow()}</p>
+    </div>
   </div>
 )
 

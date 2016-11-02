@@ -3854,6 +3854,10 @@ mkdirp@0.5.0:
   dependencies:
     minimist "0.0.8"
 
+moment:
+  version "2.15.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.15.2.tgz#1bfdedf6a6e345f322fe956d5df5bd08a8ce84dc"
+
 monocle@1.1.50:
   version "1.1.50"
   resolved "https://registry.yarnpkg.com/monocle/-/monocle-1.1.50.tgz#e21b059d99726d958371f36240c106b8a067fa7d"

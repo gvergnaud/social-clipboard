@@ -1,0 +1,85 @@
+@import './variables.scss';
+
+.InboxItem {
+  position: relative;
+  padding: 20px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+
+  background-color: rgba(0,0,0, 0);
+
+  transition: background-color .2s ease;
+
+  &:hover {
+    background-color: rgba(0,0,0, .04);
+  }
+
+  &.--loading {
+    background-color: rgba(0,0,0, .1);
+    .InboxItem-name {
+      color: rgba($grey-medium, .8);
+    }
+  }
+
+  &.--error {
+    .InboxItem-name {
+      color: $pink;
+    }
+  }
+
+  &-name {
+    margin: 5px 0;
+
+    color: $grey-dark;
+    font-size: .85rem;
+    height: 1.2rem;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-path {
+    margin: 5px 0;
+
+    font-size: .65rem;
+    height: 1.2rem;
+    color: rgba($grey-medium, .7);
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-info {
+    font-size: .7rem;
+    color: $grey-medium;
+    display: flex;
+    justify-content: space-between;
+
+    &-date, &-user {
+      margin: 0;
+    }
+  }
+
+  &-progress {
+    position: absolute;
+    height: 4px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background: $gradient-main;
+    transform: scaleY(1);
+
+    transition:
+      width .1s ease,
+      transform .3s ease;
+
+    &.--finished {
+      transform: scaleY(0);
+    }
+  }
+}

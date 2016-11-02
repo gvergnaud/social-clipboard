@@ -1,29 +1,5 @@
 @import '../../scss/variables.scss';
 
 .InboxFileView {
-  padding: 20px;
-  cursor: pointer;
-
-  &-name {
-    margin: 0;
-
-    font-size: .8rem;
-    height: 1.2rem;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &-path {
-    margin: 0;
-
-    font-size: .8rem;
-    height: 1.2rem;
-    color: rgba($grey-medium, .7);
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  
 }

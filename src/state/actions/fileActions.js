@@ -23,7 +23,7 @@ export const success = () => ({
   payload: { percent: 100 }
 })
 
-export const error = error => ({
+export const error = err => ({
   type: ERROR,
-  payload: { error }
+  payload: { err }
 })

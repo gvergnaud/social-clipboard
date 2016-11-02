@@ -11,22 +11,22 @@ import styles from './Inbox.scss'
 const cx = classNames.bind(styles)
 
 const Inbox = ({ history }) => (
-  <div className={cx('Inbox')}>
+  <section className={cx('Inbox')}>
     {history
       .map(({ copy, id }) =>  cata({
         [Copy.Text]: copyValue => ({ ...copyValue, id }),
         [Copy.File]: copyValue => ({ ...copyValue, id })
       }, copy))
       .sort((a, b) => extract(b).createdAt - extract(a).createdAt)
-      .map((copy, i) =>
-        <div key={i} className={cx('Inbox-row')}>
+      .map(copy =>
+        <article key={copy.id} className={cx('Inbox-row')}>
           {extract(cata({
             [Copy.Text]: props => <InboxText {...props} />,
             [Copy.File]: props => <InboxFile {...props} />,
           }, copy))}
-        </div>
+        </article>
       )}
-  </div>
+  </section>
 )
 
 Inbox.propTypes = {
