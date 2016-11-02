@@ -1,9 +1,10 @@
 import compose from 'lodash/fp/compose'
 import curry from 'lodash/fp/curry'
 import reduce from 'lodash/fp/reduce'
-import map from 'lodash/fp/map'
 import Const, { getConst } from './functors/Const'
 import Identity, { runIdentity } from './functors/Identity'
+
+const map = curry((mapper, xs) => xs.map(mapper))
 
 /* ----------------------------------------- *
         Lenses définition
