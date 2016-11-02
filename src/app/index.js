@@ -4,7 +4,6 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import App from 'app/containers/App'
-import './scss/global.scss'
 
 const isDev = process.env.NODE_ENV === 'development'
 const store = remote.getGlobal('store')

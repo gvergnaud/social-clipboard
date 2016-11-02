@@ -1,8 +1,6 @@
-import { Copy } from '../../utils/copy'
-
-export const CREATE = 'history.CREATE'
-export const UPDATE = 'history.UPDATE'
-export const REMOVE = 'history.REMOVE'
+export const CREATE = 'inbox.CREATE'
+export const UPDATE = 'inbox.UPDATE'
+export const REMOVE = 'inbox.REMOVE'
 
 export const create = (id, copy) => ({
   type: CREATE,
@@ -14,7 +12,7 @@ export const update = (id, copy) => ({
   payload: { id, copy }
 })
 
-export const remove = (id) => ({
+export const remove = id => ({
   type: REMOVE,
   payload: { id }
 })

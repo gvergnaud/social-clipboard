@@ -1,7 +1,8 @@
 import { globalShortcut } from 'electron'
 import MenuBar from 'menubar'
-import { sendClipboardContent, copyToClipboard } from './state/actions/globalShortcutAction'
+import { sendClipboardContent, copyToClipboard, clipboardChanged } from './state/actions/globalShortcutAction'
 import configureStore from './state/configureStore'
+import * as Clipboard from './services/Clipboard'
 
 require('electron-debug')({ showDevTools: false })
 
@@ -28,13 +29,9 @@ menuBar.on('ready', () => {
     global.store.dispatch(copyToClipboard())
   })
 
-  // Clipboard.onClipboardChange(() => {
-  //   if (Clipboard.isFile()) {
-  //     Clipboard.getFilePaths().then(console.log)
-  //   } else {
-  //     console.log('clipboard', Clipboard.readText())
-  //   }
-  // })
+  Clipboard.onClipboardChange(() => {
+    global.store.dispatch(clipboardChanged())
+  })
 })
 
 menuBar.on('will-quit', () => {

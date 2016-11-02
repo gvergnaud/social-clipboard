@@ -1,16 +1,14 @@
 import fs from 'fs'
 import path from 'path'
-import promisify from 'es6-promisify'
 import { Observable } from 'rxjs'
 import { last, head } from 'lodash/fp'
 import { noopAction } from '../../utils/moduleHelpers'
 import { createProgressHandler } from '../../utils/nodeStreams'
+import { fsStat } from '../../utils/files'
 import * as Clipboard from '../../services/Clipboard'
 import * as Notification from '../../services/Notification'
 import { emitFileStream } from '../../services/Socket'
 import { SEND_CLIPBOARD_CONTENT } from '../actions/globalShortcutAction'
-
-const fsStat = promisify(fs.stat)
 
 const sendFileEpic = action$ =>
   action$.ofType(SEND_CLIPBOARD_CONTENT)

@@ -5,6 +5,7 @@ import copyTextEpic from './copyText'
 import copyFileEpic from './copyFile'
 import receiveTextEpic from './receiveText'
 import receiveFileEpic from './receiveFile'
+import clipboardChangedEpic from './clipboardChanged'
 
 export default combineEpics(
   sendTextEpic,
@@ -12,5 +13,6 @@ export default combineEpics(
   copyTextEpic,
   copyFileEpic,
   receiveTextEpic,
-  receiveFileEpic
+  receiveFileEpic,
+  clipboardChangedEpic
 )

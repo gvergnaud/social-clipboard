@@ -1,6 +1,8 @@
 @import '../../scss/variables.scss';
 
-$header-height: 80px;
+$header-height: 60px;
+$border-radius: 6px;
+$border-size: 5px;
 
 .App {
   position: absolute;
@@ -9,12 +11,21 @@ $header-height: 80px;
   left: 0;
   right: 0;
 
-  font-family: Arial, sans-serif;
-  background-color: $white-bg;
-  border-radius: 4px;
+  border-radius: $border-radius;
+
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: $gradient-main;
+    border-radius: $border-radius;
+  }
 
   &:after {
-  	bottom: 100%;
+      bottom: 100%;
   	left: 50%;
   	border: solid transparent;
   	content: " ";
@@ -22,19 +33,39 @@ $header-height: 80px;
   	width: 0;
   	position: absolute;
   	pointer-events: none;
-  	border-color: rgba(113, 130, 213, 0);
-  	border-bottom-color: $white-bg;
-  	border-width: 8px;
-  	margin-left: -8px;
+  	border-color: rgba(86, 37, 144, 0);
+  	border-bottom-color: $purple;
+  	border-width: 6px;
+  	margin-left: -6px;
+  }
+
+  &-container {
+    position: absolute;
+    top: $border-size;
+    bottom: $border-size;
+    left: $border-size;
+    right: $border-size;
+    background-color: $white;
+    border-radius: #{$border-radius - 2px};
+    overflow: hidden;
   }
 
   &-title {
     margin-top: 0;
+    text-align: center;
+    color: rgba($pink, .5);
   }
 
   &-header {
+    position: relative;
     height: $header-height;
     padding: 10px 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 0 0 15px rgba(0,0,0,.15);
   }
 
   &-content {

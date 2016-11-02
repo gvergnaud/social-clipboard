@@ -3,6 +3,7 @@ import curry from 'lodash/fp/curry'
 export const Copy = {
   Text: 'Copy.Text',
   File: 'Copy.File',
+  Nothing: 'Copy.Nothing',
 }
 
 export const createFileCopy = value => ({
@@ -13,6 +14,11 @@ export const createFileCopy = value => ({
 export const createTextCopy = value => ({
   type: Copy.Text,
   value
+})
+
+export const createNothingCopy = () => ({
+  type: Copy.Nothing,
+  value: {}
 })
 
 export const cata = curry((cases, copy) =>

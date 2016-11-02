@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux'
-import history from './modules/history'
+import inbox from './modules/inbox'
+import currentClipboard from './modules/currentClipboard'
 
 export default combineReducers({
-  history
+  inbox,
+  currentClipboard
 })

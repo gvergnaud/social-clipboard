@@ -6,7 +6,7 @@ import { fileStream$ } from '../../services/Socket'
 import { downloadsFolderPath, createDownloadFolderIfDoesntExist } from '../../utils/files'
 import { createFileCopy } from '../../utils/copy'
 import { createProgressHandler } from '../../utils/nodeStreams'
-import { create, update } from '../actions/historyActions'
+import { create, update } from '../actions/inboxActions'
 import { start, progress, success, error } from '../actions/fileActions'
 
 

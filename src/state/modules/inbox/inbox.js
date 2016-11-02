@@ -1,8 +1,8 @@
 import values from 'lodash/fp/values'
-import { createReducer, composeMutations } from '../../utils/moduleHelpers'
-import { set, over, lensProps } from '../../utils/lens'
-import { Copy, extract, cata } from '../../utils/copy'
-import { CREATE, UPDATE, REMOVE } from '../actions/historyActions'
+import { createReducer, composeMutations } from '../../../utils/moduleHelpers'
+import { set, over, lensProps } from '../../../utils/lens'
+import { Copy, extract, cata } from '../../../utils/copy'
+import { CREATE, UPDATE, REMOVE } from '../../actions/inboxActions'
 import textReducer from './text'
 import fileReducer from './file'
 
@@ -48,6 +48,6 @@ export default createReducer(initialState, {
         Selectors
 * ----------------------------------------- */
 
-export const lastCopySelector = state => state.history.history[state.history.lastId]
+export const inboxLastSelector = state => state.inbox.history[state.inbox.lastId]
 
-export const historySelector = state => values(state.history.history)
+export const inboxHistorySelector = state => values(state.inbox.history)

@@ -1,7 +1,7 @@
-import { createReducer, composeMutations } from '../../utils/moduleHelpers'
-import { log } from '../../utils/debug'
-import { set, lensProp } from '../../utils/lens'
-import { START, PROGRESS, SUCCESS, ERROR, Status } from '../actions/fileActions'
+import { createReducer, composeMutations } from '../../../utils/moduleHelpers'
+import { log } from '../../../utils/debug'
+import { set, lensProp } from '../../../utils/lens'
+import { START, PROGRESS, SUCCESS, ERROR, Status } from '../../actions/fileActions'
 
 /* ----------------------------------------- *
         Reducer

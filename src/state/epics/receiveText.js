@@ -2,7 +2,7 @@ import shortId from 'shortid'
 import * as Notification from '../../services/Notification'
 import { textCopy$ } from '../../services/Socket'
 import { createTextCopy } from '../../utils/copy'
-import { create } from '../actions/historyActions'
+import { create } from '../actions/inboxActions'
 import { receive } from '../actions/textActions'
 
 

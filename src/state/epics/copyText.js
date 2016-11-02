@@ -1,5 +1,5 @@
 import { COPY_TO_CLIPBOARD } from '../actions/globalShortcutAction'
-import { lastCopySelector } from '../modules/history'
+import { inboxLastSelector } from '../modules/inbox'
 import * as Clipboard from '../../services/Clipboard'
 import { isTextCopy } from '../../utils/copy'
 import { noopAction } from '../../utils/moduleHelpers'
@@ -7,7 +7,7 @@ import { noopAction } from '../../utils/moduleHelpers'
 
 const copyTextEpic = (action$, store) =>
   action$.ofType(COPY_TO_CLIPBOARD)
-    .map(() => lastCopySelector(store.getState()))
+    .map(() => inboxLastSelector(store.getState()))
     .filter(copy => isTextCopy(copy))
     .do(copy => Clipboard.writeText(copy.text))
     .mapTo(noopAction())

@@ -1,6 +1,6 @@
-import { createReducer, composeMutations } from '../../utils/moduleHelpers'
-import { set, lensProp } from '../../utils/lens'
-import { RECEIVE } from '../actions/textActions'
+import { createReducer, composeMutations } from '../../../utils/moduleHelpers'
+import { set, lensProp } from '../../../utils/lens'
+import { RECEIVE } from '../../actions/textActions'
 
 /* ----------------------------------------- *
         Reducer
