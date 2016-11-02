@@ -1,23 +1,28 @@
 import React, { PropTypes } from 'react'
 import classNames from 'classnames/bind'
 
+import hover from '../../decorators/hover'
+
 import styles from './InboxTextView.scss'
 
 
 const cx = classNames.bind(styles)
 
-const InboxTextView = ({ text, onCopy }) => (
+const enhancer = hover()
+
+const InboxTextView = ({ text, onCopy, isHover }) => (
   <div
     className={cx('InboxTextView')}
     onClick={onCopy}>
-    <p className={cx('InboxTextView-text')}>{text}</p>
+    <p className={cx('InboxTextView-text')}>{isHover ? 'Click To Copy!' : text}</p>
   </div>
 )
 
 InboxTextView.propTypes = {
   text: PropTypes.string.isRequired,
-  onCopy: PropTypes.func.isRequired
+  onCopy: PropTypes.func.isRequired,
+  isHover: PropTypes.bool.isRequired,
 }
 
 
-export default InboxTextView
+export default enhancer(InboxTextView)

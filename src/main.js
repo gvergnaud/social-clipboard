@@ -15,7 +15,7 @@ const menuBar = MenuBar({
   height: 450,
   alwaysOnTop: true,
   preloadWindow: true,
-  showOnAllWorkspaces: false,
+  showOnAllWorkspaces: true,
   transparent: true,
   frame: false
 })
