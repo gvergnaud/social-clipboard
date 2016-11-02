@@ -48,6 +48,8 @@ export default createReducer(initialState, {
         Selectors
 * ----------------------------------------- */
 
-export const inboxLastSelector = state => state.inbox.history[state.inbox.lastId]
+export const inboxItemSelector = (id, state) => state.inbox.history[id]
 
-export const inboxHistorySelector = state => values(state.inbox.history)
+export const inboxLastSelector = state => inboxItemSelector(state.inbox.lastId, state)
+
+export const inboxHistoryIdsSelector = state => Object.keys(state.inbox.history)

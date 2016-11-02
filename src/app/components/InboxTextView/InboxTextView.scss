@@ -1,0 +1,15 @@
+@import '../../scss/variables.scss';
+
+.InboxTextView {
+  padding: 20px;
+
+  &-text {
+    margin: 0;
+    font-size: .8rem;
+    height: 1.2rem;
+
+    white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+  }
+}

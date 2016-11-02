@@ -23,33 +23,28 @@ const createFileActionsObservable = (stream, { name, size }) => new Observable(o
   const { progress: progressTransform, percent$ } = createProgressHandler(size)
   const copyId = shortId.generate()
 
-  const next = x => {
-    if (isActive) observer.next(x)
-  }
-
-  next(startFileDownloadAction(copyId, filePath, name))
+  observer.next(startFileDownloadAction(copyId, filePath, name))
 
   stream
     .pipe(progressTransform)
     .pipe(fs.createWriteStream(filePath))
     .on('finish', () => {
-      next(fileDownloadSuccessAction(copyId))
+      observer.next(fileDownloadSuccessAction(copyId))
       observer.complete()
     })
     .on('error', err => {
-      next(fileDownloadErrorAction(copyId, err))
+      observer.next(fileDownloadErrorAction(copyId, err))
       observer.complete()
     })
 
   const percentSub = percent$.subscribe({
     next: percentage => {
-      next(fileDownloadProgressAction(copyId, percentage))
+      observer.next(fileDownloadProgressAction(copyId, percentage))
     }
   })
 
   return {
     unsubscribe: () => {
-      isActive = false
       percentSub.unsubscribe()
     }
   }

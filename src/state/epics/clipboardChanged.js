@@ -18,7 +18,7 @@ const clipboardChanged = action$ =>
           .map(head)
           .flatMap(filePath =>
             Observable
-              .fromePromise(fsStat(filePath))
+              .fromPromise(fsStat(filePath))
               .map(stat => ({ filePath, stat }))
           )
           .map(({ filePath, stat }) => ({

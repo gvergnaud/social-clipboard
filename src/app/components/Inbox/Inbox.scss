@@ -1,0 +1,12 @@
+@import '../../scss/variables.scss';
+
+.Inbox {
+  &-row {
+    min-height: 60px;
+    color: $grey-medium;
+
+    & + * {
+      border-top: 1px solid rgba(0,0,0,.07);
+    }
+  }
+}

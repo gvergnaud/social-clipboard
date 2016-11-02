@@ -1,5 +1,5 @@
 export const SEND_CLIPBOARD_CONTENT = 'global.SEND_CLIPBOARD_CONTENT'
-export const COPY_TO_CLIPBOARD = 'global.COPY_TO_CLIPBOARD'
+export const COPY_LAST_TO_CLIPBOARD = 'global.COPY_LAST_TO_CLIPBOARD'
 export const CLIPBOARD_CHANGED = 'global.CLIPBOARD_CHANGED'
 
 /* ----------------------------------------- *
@@ -11,7 +11,7 @@ export const sendClipboardContent = () => ({
 })
 
 export const copyToClipboard = () => ({
-  type: COPY_TO_CLIPBOARD
+  type: COPY_LAST_TO_CLIPBOARD
 })
 
 export const clipboardChanged = () => ({

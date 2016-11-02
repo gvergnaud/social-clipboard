@@ -1,16 +1,19 @@
 import React, { PropTypes } from 'react'
 import classNames from 'classnames/bind'
-import compose from 'lodash/fp/compose'
 import { connect } from 'react-redux'
-import { inboxHistorySelector } from 'state/modules/inbox'
-import { Copy, extract, cata } from 'utils/copy'
+import { inboxHistoryIdsSelector, inboxItemSelector } from 'state/modules/inbox'
 import styles from './App.scss'
 import '../../scss/global.scss'
+
+import Inbox from '../../components/Inbox'
 
 const cx = classNames.bind(styles)
 
 const enhancer = connect(state => ({
-  history: inboxHistorySelector(state)
+  history: inboxHistoryIdsSelector(state).map(id => ({
+    id,
+    copy: inboxItemSelector(id, state)
+  }))
 }))
 
 const App = ({ history }) => (
@@ -21,17 +24,7 @@ const App = ({ history }) => (
       </div>
 
       <div className={cx('App-content')}>
-        <ul>
-          {history
-            .map(compose(extract, cata({
-              [Copy.Text]: copy => copy.text,
-              [Copy.File]: copy => copy.name,
-            })))
-            .map((text, i) =>
-              <li key={i}>{text.slice(0, 50)}...</li>
-            )
-          }
-        </ul>
+        <Inbox history={history} />
       </div>
     </div>
   </div>
