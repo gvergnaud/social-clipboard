@@ -1,11 +1,11 @@
 import path from 'path'
 import { Observable } from 'rxjs'
 import { last, head, compose } from 'lodash/fp'
-import * as Clipboard from '../../services/Clipboard'
-import { Copy, createFileCopy, createTextCopy, cata, extract } from '../../utils/copy'
-import { fsStat } from '../../utils/files'
-import { CLIPBOARD_CHANGED } from '../actions/globalShortcutAction'
-import { updateCurrentClipboard } from '../actions/currentClipboard'
+import * as Clipboard from '../../../services/Clipboard'
+import { Copy, createFileCopy, createTextCopy, cata, extract } from '../../../utils/copy'
+import { fsStat } from '../../../utils/files'
+import { CLIPBOARD_CHANGED } from '../../actions/clipboardActions'
+import { updateCurrentClipboard } from '../../actions/currentClipboard'
 
 const clipboardChanged = action$ =>
   action$.ofType(CLIPBOARD_CHANGED)

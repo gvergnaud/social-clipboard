@@ -2,13 +2,13 @@ import fs from 'fs'
 import path from 'path'
 import { Observable } from 'rxjs'
 import { last, head } from 'lodash/fp'
-import { noopAction } from '../../utils/moduleHelpers'
-import { createProgressHandler } from '../../utils/nodeStreams'
-import { fsStat } from '../../utils/files'
-import * as Clipboard from '../../services/Clipboard'
-import * as Notification from '../../services/Notification'
-import { emitFileStream } from '../../services/Socket'
-import { SEND_CLIPBOARD_CONTENT } from '../actions/globalShortcutAction'
+import { noopAction } from '../../../utils/moduleHelpers'
+import { createProgressHandler } from '../../../utils/nodeStreams'
+import { fsStat } from '../../../utils/files'
+import * as Clipboard from '../../../services/Clipboard'
+import * as Notification from '../../../services/Notification'
+import { emitFileStream } from '../../../services/Socket'
+import { SEND_CLIPBOARD_CONTENT } from '../../actions/socketActions'
 
 const sendFileEpic = action$ =>
   action$.ofType(SEND_CLIPBOARD_CONTENT)
@@ -32,12 +32,12 @@ const sendFileEpic = action$ =>
               fs.createReadStream(filePath)
                 .pipe(progress)
                 .pipe(emitFileStream({ name, size }))
+                .on('close', () => resolve(name))
                 .on('error', err => reject(err))
 
               percent$
                 .throttleTime(1000)
                 .subscribe({
-                  complete: () => resolve(name),
                   next: percentage => Notification.sendFileProgress({ name, percentage }),
                   error: reject,
                 })
@@ -47,6 +47,7 @@ const sendFileEpic = action$ =>
     )
     .do(name => Notification.fileSent(name))
     .mapTo(noopAction())
+    .catch(err => console.log('sendFile error : ', err))
 
 
 export default sendFileEpic

@@ -19,7 +19,7 @@ const Inbox = ({ history }) => (
       }, copy))
       .sort((a, b) => extract(b).createdAt - extract(a).createdAt)
       .map(copy =>
-        <article key={copy.id} className={cx('Inbox-row')}>
+        <article key={extract(copy).id} className={cx('Inbox-row')}>
           {extract(cata({
             [Copy.Text]: props => <InboxText {...props} />,
             [Copy.File]: props => <InboxFile {...props} />,

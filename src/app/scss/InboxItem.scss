@@ -3,7 +3,6 @@
 .InboxItem {
   position: relative;
   padding: 20px;
-  cursor: pointer;
 
   display: flex;
   justify-content: space-around;
@@ -28,6 +27,10 @@
     .InboxItem-name {
       color: $pink;
     }
+  }
+
+  &.--finished {
+    cursor: pointer;
   }
 
   &-name {

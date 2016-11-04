@@ -1,5 +1,3 @@
-import compose from 'lodash/fp/compose'
-
 export const composeMutations = (...mutations) => (state, action) =>
   mutations.reduceRight((mutatedState, mutation) => mutation(mutatedState, action), state)
 

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { copyToClipboard } from '../../../state/actions/inboxActions'
+import { copyToClipboard } from '../../../state/actions/clipboardActions'
 
 import InboxTextView from '../../components/InboxTextView'
 

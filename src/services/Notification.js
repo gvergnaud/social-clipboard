@@ -1,6 +1,6 @@
 const notifier = require('node-notifier')
 
-const notify = options => new Promise((resolve, reject) => {
+export const notify = options => new Promise((resolve, reject) => {
   notifier.notify(options, (err, response) => {
     if (err) return reject(err)
     resolve(response)
@@ -17,12 +17,6 @@ export const textCopySent = text => notify({
   message: `you just sent ${text}`,
 })
 
-export const newFile = name => notify({
-  title: 'somebody sent a file!',
-  subtitle: '',
-  message: name,
-})
-
 export const sendFileProgress = ({ name, percentage }) => notify({
   title: `Sending ${name}...`,
   message: `progress: ${percentage}%`,
@@ -31,6 +25,11 @@ export const sendFileProgress = ({ name, percentage }) => notify({
 export const receiveFileProgress = ({ name, percentage }) => notify({
   title: `Receiving ${name}...`,
   message: `progress: ${percentage}%`,
+})
+
+export const receiveFileSuccess = name => notify({
+  title: `${name} received`,
+  message: 'it has been added to you clipboard. Past it anywhere!',
 })
 
 export const fileSent = name => notify({

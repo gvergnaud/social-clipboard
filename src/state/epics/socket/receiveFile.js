@@ -3,12 +3,14 @@ import path from 'path'
 import shortId from 'shortid'
 import { Observable } from 'rxjs'
 import { last, dropRight } from 'lodash/fp'
-import { fileStream$ } from '../../services/Socket'
-import { downloadsFolderPath, createDownloadFolderIfDoesntExist } from '../../utils/files'
-import { createFileCopy } from '../../utils/copy'
-import { createProgressHandler } from '../../utils/nodeStreams'
-import { create, update } from '../actions/inboxActions'
-import { start, progress, success, error } from '../actions/fileActions'
+import { fileStream$ } from '../../../services/Socket'
+import { downloadsFolderPath, createDownloadFolderIfDoesntExist } from '../../../utils/files'
+import { createFileCopy } from '../../../utils/copy'
+import { createProgressHandler } from '../../../utils/nodeStreams'
+import { create, update } from '../../actions/inboxActions'
+import { start, progress, success, error } from '../../actions/fileActions'
+import { notifyFileSuccess, notifyFileProgress } from '../../actions/notificationActions'
+import { copyToClipboard } from '../../actions/clipboardActions'
 
 
 const startFileDownloadAction = (id, filePath, name) => create(id, createFileCopy(start(filePath, name)))
@@ -35,9 +37,12 @@ const createFileActionsObservable = (stream, { name, size }) => new Observable(o
     .pipe(fs.createWriteStream(filePath))
     .on('finish', () => {
       observer.next(fileDownloadSuccessAction(copyId))
+      observer.next(notifyFileSuccess(name))
+      observer.next(copyToClipboard(copyId))
       observer.complete()
     })
     .on('error', err => {
+      console.log('receiveFile error', err)
       observer.next(fileDownloadErrorAction(copyId, err))
       observer.complete()
     })
@@ -45,6 +50,7 @@ const createFileActionsObservable = (stream, { name, size }) => new Observable(o
   const percentSub = percent$.subscribe({
     next: percentage => {
       observer.next(fileDownloadProgressAction(copyId, percentage))
+      observer.next(notifyFileProgress(name, percentage))
     }
   })
 
@@ -59,6 +65,7 @@ const receiveFileEpic = () =>
   fileStream$
     .do(createDownloadFolderIfDoesntExist)
     .flatMap(([ stream, { name, size } ]) => createFileActionsObservable(stream, { name, size }))
+    .catch(err => console.log('receiveFileEpic error ', err))
 
 
 export default receiveFileEpic

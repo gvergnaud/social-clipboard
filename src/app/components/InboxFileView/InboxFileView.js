@@ -42,6 +42,7 @@ const InboxFileView = ({
     className={`${cx('InboxFileView')} ${cy('InboxItem', {
       '--error': isError,
       '--loading': isDownloading,
+      '--finished': isFinished,
     })}`}
     onClick={isFinished ? onCopy : noOp}>
     <p className={cy('InboxItem-name')}>{name}</p>

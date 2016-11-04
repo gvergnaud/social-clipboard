@@ -1,6 +1,7 @@
 import { globalShortcut } from 'electron'
 import MenuBar from 'menubar'
-import { sendClipboardContent, copyToClipboard, clipboardChanged } from './state/actions/globalShortcutAction'
+import { sendClipboardContent } from './state/actions/socketActions'
+import { copyLastToClipboard, clipboardChanged } from './state/actions/clipboardActions'
 import configureStore from './state/configureStore'
 import * as Clipboard from './services/Clipboard'
 
@@ -26,7 +27,7 @@ menuBar.on('ready', () => {
   })
 
   globalShortcut.register('CommandOrControl+Shift+C', () => {
-    global.store.dispatch(copyToClipboard())
+    global.store.dispatch(copyLastToClipboard())
   })
 
   Clipboard.onClipboardChange(() => {

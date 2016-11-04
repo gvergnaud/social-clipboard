@@ -1,9 +1,9 @@
 import { combineEpics } from 'redux-observable'
-import { COPY_TO_CLIPBOARD } from '../actions/inboxActions'
-import { inboxItemSelector } from '../modules/inbox'
-import * as Clipboard from '../../services/Clipboard'
-import { noopAction } from '../../utils/moduleHelpers'
-import { isFileCopy, isTextCopy, extract } from '../../utils/copy'
+import { inboxItemSelector } from '../../modules/inbox'
+import * as Clipboard from '../../../services/Clipboard'
+import { noopAction } from '../../../utils/moduleHelpers'
+import { isFileCopy, isTextCopy, extract } from '../../../utils/copy'
+import { COPY_TO_CLIPBOARD } from '../../actions/clipboardActions'
 
 
 const copyFileEpic = (action$, store) =>

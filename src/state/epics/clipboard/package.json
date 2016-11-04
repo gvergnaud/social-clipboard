@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "name": "clipboard",
+  "main": "clipboard.js"
+}
