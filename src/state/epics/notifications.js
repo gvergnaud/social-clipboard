@@ -1,31 +1,60 @@
 import { combineEpics } from 'redux-observable'
 import { prop } from 'lodash/fp'
 import * as Notification from '../../services/Notification'
-import { noopAction } from '../../utils/moduleHelpers'
-import { NOTIFY_FILE_PROGRESS, NOTIFY_FILE_SUCCESS } from '../actions/notificationActions'
+import {
+  NOTIFY_RECEIVE_FILE_PROGRESS,
+  NOTIFY_RECEIVE_FILE_SUCCESS,
+  NOTIFY_TEXT_RECEIVED,
+  NOTIFY_SEND_FILE_PROGRESS,
+  NOTIFY_SEND_FILE_SUCCESS,
+} from '../actions/notificationActions'
 
+
+const floorPercent = ({ percent, ...rest }) => ({
+  ...rest,
+  percent: Math.floor(percent / 10) * 10
+})
+
+const arePercentEquals = (a, b) => a.percent === b.percent
 
 const fileDownloadProgress = action$ =>
-  action$.ofType(NOTIFY_FILE_PROGRESS)
+  action$.ofType(NOTIFY_RECEIVE_FILE_PROGRESS)
     .map(prop('payload'))
-    .map(({ percent, ...rest }) => ({
-      ...rest,
-      percent: Math.floor(percent / 10) * 10
-    }))
-    .distinctUntilChanged((a, b) => a.percent === b.percent)
-    .do(({ name, percent }) => Notification.receiveFileProgress({
-      name,
-      percentage: percent,
-    }))
-    .mapTo(noopAction())
+    .map(floorPercent)
+    .distinctUntilChanged(arePercentEquals)
+    .do(Notification.receiveFileProgress)
+    .filter(() => false)
 
 const fileDownloadSuccess = action$ =>
-  action$.ofType(NOTIFY_FILE_SUCCESS)
+  action$.ofType(NOTIFY_RECEIVE_FILE_SUCCESS)
     .map(prop('payload'))
     .do(({ name }) => Notification.receiveFileSuccess(name))
-    .mapTo(noopAction())
+    .filter(() => false)
+
+const receiveText = action$ =>
+  action$.ofType(NOTIFY_TEXT_RECEIVED)
+    .map(prop('payload'))
+    .do(({ text }) => Notification.receiveText(text))
+    .filter(() => false)
+
+const fileSendProgress = action$ =>
+  action$.ofType(NOTIFY_SEND_FILE_PROGRESS)
+    .map(prop('payload'))
+    .map(floorPercent)
+    .distinctUntilChanged(arePercentEquals)
+    .do(Notification.sendFileProgress)
+    .filter(() => false)
+
+const fileSendSuccess = action$ =>
+  action$.ofType(NOTIFY_SEND_FILE_SUCCESS)
+    .map(prop('payload'))
+    .do(({ name }) => Notification.sendFileSuccess(name))
+    .filter(() => false)
 
 export default combineEpics(
   fileDownloadProgress,
-  fileDownloadSuccess
+  fileDownloadSuccess,
+  receiveText,
+  fileSendProgress,
+  fileSendSuccess,
 )

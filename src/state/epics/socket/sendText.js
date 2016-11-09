@@ -9,7 +9,7 @@ const sendTextEpic = action$ =>
     .filter(() => !Clipboard.isFile())
     .map(() => Clipboard.readText())
     .do(text => emitTextCopy(text))
-    .do(text => Notification.textCopySent(text))
+    .do(text => Notification.textSent(text))
     .mapTo(noopAction())
 
 export default sendTextEpic

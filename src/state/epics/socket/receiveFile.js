@@ -9,7 +9,7 @@ import { createFileCopy } from '../../../utils/copy'
 import { createProgressHandler } from '../../../utils/nodeStreams'
 import { create, update } from '../../actions/inboxActions'
 import { start, progress, success, error } from '../../actions/fileActions'
-import { notifyFileSuccess, notifyFileProgress } from '../../actions/notificationActions'
+import { notifyReceiveFileSuccess, notifyReceiveFileProgress } from '../../actions/notificationActions'
 import { copyToClipboard } from '../../actions/clipboardActions'
 
 
@@ -37,7 +37,7 @@ const createFileActionsObservable = (stream, { name, size }) => new Observable(o
     .pipe(fs.createWriteStream(filePath))
     .on('finish', () => {
       observer.next(fileDownloadSuccessAction(copyId))
-      observer.next(notifyFileSuccess(name))
+      observer.next(notifyReceiveFileSuccess(name))
       observer.next(copyToClipboard(copyId))
       observer.complete()
     })
@@ -50,7 +50,7 @@ const createFileActionsObservable = (stream, { name, size }) => new Observable(o
   const percentSub = percent$.subscribe({
     next: percentage => {
       observer.next(fileDownloadProgressAction(copyId, percentage))
-      observer.next(notifyFileProgress(name, percentage))
+      observer.next(notifyReceiveFileProgress(name, percentage))
     }
   })
 
