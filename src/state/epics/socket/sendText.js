@@ -1,7 +1,6 @@
-import * as Notification from '../../../services/Notification'
 import * as Clipboard from '../../../services/Clipboard'
 import { emitTextCopy } from '../../../services/Socket'
-import { noopAction } from '../../../utils/moduleHelpers'
+import { notifyTextSent } from '../../actions/notificationActions'
 import { SEND_CLIPBOARD_CONTENT } from '../../actions/socketActions'
 
 const sendTextEpic = action$ =>
@@ -9,7 +8,6 @@ const sendTextEpic = action$ =>
     .filter(() => !Clipboard.isFile())
     .map(() => Clipboard.readText())
     .do(text => emitTextCopy(text))
-    .do(text => Notification.textSent(text))
-    .mapTo(noopAction())
+    .map(text => notifyTextSent(text))
 
 export default sendTextEpic

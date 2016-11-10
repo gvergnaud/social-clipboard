@@ -4,9 +4,10 @@ import * as Notification from '../../services/Notification'
 import {
   NOTIFY_RECEIVE_FILE_PROGRESS,
   NOTIFY_RECEIVE_FILE_SUCCESS,
-  NOTIFY_TEXT_RECEIVED,
   NOTIFY_SEND_FILE_PROGRESS,
   NOTIFY_SEND_FILE_SUCCESS,
+  NOTIFY_TEXT_RECEIVED,
+  NOTIFY_TEXT_SENT,
 } from '../actions/notificationActions'
 
 
@@ -31,12 +32,6 @@ const fileDownloadSuccess = action$ =>
     .do(({ name }) => Notification.receiveFileSuccess(name))
     .filter(() => false)
 
-const receiveText = action$ =>
-  action$.ofType(NOTIFY_TEXT_RECEIVED)
-    .map(prop('payload'))
-    .do(({ text }) => Notification.receiveText(text))
-    .filter(() => false)
-
 const fileSendProgress = action$ =>
   action$.ofType(NOTIFY_SEND_FILE_PROGRESS)
     .map(prop('payload'))
@@ -51,10 +46,23 @@ const fileSendSuccess = action$ =>
     .do(({ name }) => Notification.sendFileSuccess(name))
     .filter(() => false)
 
+const receiveText = action$ =>
+  action$.ofType(NOTIFY_TEXT_RECEIVED)
+    .map(prop('payload'))
+    .do(({ text }) => Notification.receiveText(text))
+    .filter(() => false)
+
+const sendText = action$ =>
+  action$.ofType(NOTIFY_TEXT_SENT)
+    .map(prop('payload'))
+    .do(({ text }) => Notification.textSent(text))
+    .filter(() => false)
+
 export default combineEpics(
   fileDownloadProgress,
   fileDownloadSuccess,
-  receiveText,
   fileSendProgress,
   fileSendSuccess,
+  receiveText,
+  sendText
 )

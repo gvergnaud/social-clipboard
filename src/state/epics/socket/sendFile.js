@@ -30,17 +30,16 @@ const createSendFileActionsObservable = () => new Observable(observer => {
           observer.next(notifySendFileSuccess(name))
           observer.complete()
         })
-        .on('error', () => {
-          observer.complete()
-        })
+        .on('error', err => observer.error(err))
 
       percent$
         .throttleTime(1000)
         .subscribe({
           next: percent => observer.next(notifySendFileProgress(name, percent)),
-          error: () => observer.complete(),
+          error: err => observer.error(err),
         })
     })
+    .catch(err => observer.error(err))
 })
 
 const sendFileEpic = action$ =>

@@ -3,12 +3,12 @@ const notifier = require('node-notifier')
 export const notify = options => new Promise((resolve, reject) => {
   notifier.notify(options, (err, response) => {
     if (err) return reject(err)
-    resolve(response)
+    return resolve(response)
   })
 }).catch(err => console.error('Notification error :', err))
 
 export const receiveText = text => notify({
-  title: 'new copy!',
+  title: 'Text received!',
   message: text,
 })
 

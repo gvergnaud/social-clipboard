@@ -1,7 +1,6 @@
 import { combineEpics } from 'redux-observable'
 import { inboxLastSelector } from '../../modules/inbox'
 import * as Clipboard from '../../../services/Clipboard'
-import { noopAction } from '../../../utils/moduleHelpers'
 import { isFileCopy, isTextCopy, extract } from '../../../utils/copy'
 import { COPY_LAST_TO_CLIPBOARD } from '../../actions/clipboardActions'
 
@@ -11,7 +10,7 @@ const copyLastTextEpic = (action$, store) =>
     .filter(copy => isTextCopy(copy))
     .map(extract)
     .do(copyValue => Clipboard.writeText(copyValue.text))
-    .mapTo(noopAction())
+    .filter(() => false)
 
 const copyLastFileEpic = (action$, store) =>
   action$.ofType(COPY_LAST_TO_CLIPBOARD)
@@ -19,7 +18,7 @@ const copyLastFileEpic = (action$, store) =>
     .filter(copy => isFileCopy(copy))
     .map(extract)
     .do(copyValue => Clipboard.writeFileWithPath(copyValue.filePath))
-    .mapTo(noopAction())
+    .filter(() => false)
 
 
 export default combineEpics(
